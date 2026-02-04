@@ -1,0 +1,16 @@
+{
+  "classes": [
+    "content_consumer",
+    "gamer",
+    "mixed_user",
+    "productivity_focused",
+    "social_butterfly"
+  ],
+  "class_to_idx": {
+    "content_consumer": 0,
+    "gamer": 1,
+    "mixed_user": 2,
+    "productivity_focused": 3,
+    "social_butterfly": 4
+  }
+}
