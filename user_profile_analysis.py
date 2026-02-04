@@ -212,11 +212,11 @@ def exploratory_analysis(df):
     """Realiza análise exploratória completa do dataset"""
     
     print("=" * 70)
-    print("📊 ANÁLISE EXPLORATÓRIA DO DATASET DE USO DE SMARTPHONE")
+    print("ANÁLISE EXPLORATÓRIA DO DATASET DE USO DE SMARTPHONE")
     print("=" * 70)
     
     # Informações básicas
-    print("\n📋 INFORMAÇÕES BÁSICAS")
+    print("\nINFORMAÇÕES BÁSICAS")
     print("-" * 40)
     print(f"Total de registros: {len(df)}")
     print(f"Total de features: {len(df.columns)}")
@@ -225,7 +225,7 @@ def exploratory_analysis(df):
         print(f"  • {col}: {df[col].dtype}")
     
     # Estatísticas descritivas
-    print("\n\n📈 ESTATÍSTICAS DESCRITIVAS (Features Numéricas)")
+    print("\n\nESTATÍSTICAS DESCRITIVAS (Features Numéricas)")
     print("-" * 40)
     numeric_cols = ['youtube_mins_daily', 'social_media_mins_daily', 'gaming_mins_daily',
                    'productivity_mins_daily', 'total_app_usage_mins', 'screen_on_hours',
@@ -233,16 +233,16 @@ def exploratory_analysis(df):
     print(df[numeric_cols].describe().round(2).to_string())
     
     # Distribuição dos perfis
-    print("\n\n🎯 DISTRIBUIÇÃO DOS PERFIS DE USUÁRIO")
+    print("\n\nDISTRIBUIÇÃO DOS PERFIS DE USUÁRIO")
     print("-" * 40)
     profile_counts = df['user_profile'].value_counts()
     for profile, count in profile_counts.items():
         pct = count / len(df) * 100
-        bar = "█" * int(pct / 2)
+        bar = "|" * int(pct / 2)
         print(f"{profile:25s}: {count:4d} ({pct:5.1f}%) {bar}")
     
     # Médias por perfil
-    print("\n\n📊 MÉDIA DE USO POR CATEGORIA E PERFIL (minutos/dia)")
+    print("\n\nMÉDIA DE USO POR CATEGORIA E PERFIL (minutos/dia)")
     print("-" * 70)
     usage_cols = ['youtube_mins_daily', 'social_media_mins_daily', 'gaming_mins_daily', 
                   'productivity_mins_daily', 'streaming_mins_daily']
@@ -398,7 +398,7 @@ def create_visualizations(df):
     plt.savefig('/home/claude/eda_visualizations.png', dpi=150, bbox_inches='tight')
     plt.close()
     
-    print("\n✅ Visualizações salvas em: /home/claude/eda_visualizations.png")
+    print("\nVisualizações salvas em: /home/claude/eda_visualizations.png")
 
 # ============================================================
 # 4. PREPARAÇÃO PARA ML
@@ -428,7 +428,7 @@ def prepare_for_ml(df):
     ]
     
     # Importância de features (baseada em correlação com target)
-    print("\n📊 FEATURES RECOMENDADAS PARA O MODELO:")
+    print("\nFEATURES RECOMENDADAS PARA O MODELO:")
     print("-" * 40)
     
     from sklearn.preprocessing import LabelEncoder
@@ -442,11 +442,11 @@ def prepare_for_ml(df):
     
     fi_df = pd.DataFrame(feature_importance).sort_values('importance', ascending=False)
     for _, row in fi_df.iterrows():
-        bar = "█" * int(row['importance'] * 50)
+        bar = "|" * int(row['importance'] * 50)
         print(f"{row['feature']:30s}: {row['importance']:.3f} {bar}")
     
     # Estatísticas das classes
-    print("\n\n📊 BALANCEAMENTO DAS CLASSES:")
+    print("\n\n BALANCEAMENTO DAS CLASSES:")
     print("-" * 40)
     class_counts = df['user_profile'].value_counts()
     for cls, count in class_counts.items():
@@ -455,12 +455,12 @@ def prepare_for_ml(df):
     
     # Salvar dataset processado
     df.to_csv('/home/claude/smartphone_usage_dataset.csv', index=False)
-    print(f"\n✅ Dataset salvo em: /home/claude/smartphone_usage_dataset.csv")
+    print(f"\nDataset salvo em: /home/claude/smartphone_usage_dataset.csv")
     
     # Criar versão simplificada para ML
     ml_df = df[feature_cols + ['user_profile']].copy()
     ml_df.to_csv('/home/claude/smartphone_usage_ml_ready.csv', index=False)
-    print(f"✅ Dataset ML-ready salvo em: /home/claude/smartphone_usage_ml_ready.csv")
+    print(f"Dataset ML-ready salvo em: /home/claude/smartphone_usage_ml_ready.csv")
     
     return df, feature_cols
 
@@ -477,7 +477,7 @@ def train_baseline_model(df, feature_cols):
     from sklearn.metrics import classification_report, confusion_matrix
     
     print("\n" + "=" * 70)
-    print("🎯 TREINAMENTO DO MODELO BASELINE (Random Forest)")
+    print("TREINAMENTO DO MODELO BASELINE (Random Forest)")
     print("=" * 70)
     
     # Preparar dados
@@ -502,17 +502,17 @@ def train_baseline_model(df, feature_cols):
     # Avaliação
     y_pred = rf.predict(X_test_scaled)
     
-    print("\n📊 RELATÓRIO DE CLASSIFICAÇÃO:")
+    print("\n RELATÓRIO DE CLASSIFICAÇÃO:")
     print("-" * 50)
     print(classification_report(y_test, y_pred, target_names=le.classes_))
     
     # Cross-validation
     cv_scores = cross_val_score(rf, X_train_scaled, y_train, cv=5, scoring='accuracy')
-    print(f"\n🔄 Cross-Validation (5-fold):")
+    print(f"\nCross-Validation (5-fold):")
     print(f"   Accuracy: {cv_scores.mean():.3f} (+/- {cv_scores.std()*2:.3f})")
     
     # Feature importance do modelo
-    print("\n📊 IMPORTÂNCIA DAS FEATURES (Random Forest):")
+    print("\nIMPORTÂNCIA DAS FEATURES (Random Forest):")
     print("-" * 50)
     importances = pd.DataFrame({
         'feature': feature_cols,
@@ -520,11 +520,11 @@ def train_baseline_model(df, feature_cols):
     }).sort_values('importance', ascending=False)
     
     for _, row in importances.iterrows():
-        bar = "█" * int(row['importance'] * 100)
+        bar = "|" * int(row['importance'] * 100)
         print(f"{row['feature']:30s}: {row['importance']:.3f} {bar}")
     
     # Matriz de confusão
-    print("\n📊 MATRIZ DE CONFUSÃO:")
+    print("\nMATRIZ DE CONFUSÃO:")
     print("-" * 50)
     cm = confusion_matrix(y_test, y_pred)
     cm_df = pd.DataFrame(cm, index=le.classes_, columns=le.classes_)
@@ -537,20 +537,20 @@ def train_baseline_model(df, feature_cols):
 # ============================================================
 
 if __name__ == "__main__":
-    print("\n" + "🚀" * 35)
-    print("   SISTEMA DE CLASSIFICAÇÃO DE PERFIL DE USUÁRIO MOBILE")
-    print("🚀" * 35 + "\n")
+    print("\n" + " " * 35)
+    print("SISTEMA DE CLASSIFICAÇÃO DE PERFIL DE USUÁRIO MOBILE")
+    print(" " * 35 + "\n")
     
     # 1. Gerar dataset
-    print("📂 Gerando dataset sintético...")
+    print("Gerando dataset sintético...")
     df = generate_synthetic_dataset(n_samples=1000)
-    print(f"   ✅ Dataset gerado com {len(df)} registros e {len(df.columns)} colunas")
+    print(f"   Dataset gerado com {len(df)} registros e {len(df.columns)} colunas")
     
     # 2. Análise exploratória
     df = exploratory_analysis(df)
     
     # 3. Visualizações
-    print("\n📊 Gerando visualizações...")
+    print("\n Gerando visualizações...")
     create_visualizations(df)
     
     # 4. Preparação para ML
@@ -560,13 +560,13 @@ if __name__ == "__main__":
     model, scaler, le = train_baseline_model(df, feature_cols)
     
     print("\n" + "=" * 70)
-    print("✅ ANÁLISE COMPLETA!")
-    print("=" * 70)
-    print("\n📁 ARQUIVOS GERADOS:")
+    print("ANÁLISE COMPLETA!")
+    print("/=" * 70)
+    print("\n ARQUIVOS GERADOS:")
     print("   • smartphone_usage_dataset.csv - Dataset completo")
     print("   • smartphone_usage_ml_ready.csv - Dataset para ML")
     print("   • eda_visualizations.png - Visualizações EDA")
-    print("\n🎯 PRÓXIMOS PASSOS:")
+    print("\n PRÓXIMOS PASSOS:")
     print("   1. Testar outros modelos (XGBoost, SVM, Neural Network)")
     print("   2. Otimizar hiperparâmetros")
     print("   3. Converter para TFLite para rodar no Android")
